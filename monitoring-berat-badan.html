@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitoring Berat Badan - Iqbal Setiadi</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h1 class="logo">Monitoring<span>Pribadi</span></h1>
+                <p class="user-name">Iqbal Setiadi</p>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="index.html" class="nav-item">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="14" width="7" height="7"></rect>
+                        <rect x="3" y="14" width="7" height="7"></rect>
+                    </svg>
+                    <span>Dashboard</span>
+                </a>
+                <a href="monitoring-berat-badan.html" class="nav-item active">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                    </svg>
+                    <span>Berat Badan</span>
+                </a>
+                <a href="monitoring-tekanan-darah.html" class="nav-item">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                    </svg>
+                    <span>Tekanan Darah</span>
+                </a>
+                <a href="monitoring-sholat.html" class="nav-item">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                    <span>Monitoring Sholat</span>
+                </a>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <button class="btn-settings" onclick="openSettings()">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M12 1v6m0 6v6m5.2-13.2l-3.6 3.6m-3.6 3.6l-3.6 3.6m13.2-5.2l-3.6-3.6m-3.6-3.6l-3.6-3.6"></path>
+                    </svg>
+                    Pengaturan
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="page-header">
+                <div class="header-content">
+                    <h2 class="page-title">Monitoring Berat Badan</h2>
+                    <p class="page-subtitle">Catat dan pantau perkembangan berat badan Anda</p>
+                </div>
+                <div class="header-actions">
+                    <div class="date-display" id="currentDate"></div>
+                </div>
+            </header>
+
+            <!-- Info Box Biodata -->
+            <section class="info-box" id="biodataInfo" style="display:none;">
+                <h4>Biodata Anda</h4>
+                <p id="biodataDisplay">Loading...</p>
+                <button class="btn-secondary" onclick="editBiodata()" style="margin-top: 0.5rem;">Edit Biodata</button>
+            </section>
+
+            <!-- Form Biodata (One-time setup) -->
+            <section class="form-section" id="biodataForm">
+                <div class="form-header">
+                    <h3 class="form-title">Data Awal (Biodata)</h3>
+                    <p class="page-subtitle">Isi data berikut untuk memulai monitoring</p>
+                </div>
+                
+                <form id="formBiodata" onsubmit="saveBiodata(event)">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Nama Lengkap *</label>
+                            <input type="text" class="form-input" id="namaLengkap" value="Iqbal Setiadi" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Umur *</label>
+                            <input type="number" class="form-input" id="umur" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Tempat Lahir *</label>
+                            <input type="text" class="form-input" id="tempatLahir" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Tanggal Lahir *</label>
+                            <input type="date" class="form-input" id="tanggalLahir" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Hobi</label>
+                            <input type="text" class="form-input" id="hobi">
+                        </div>
+                        <div class="form-group">
+                            <label>Pekerjaan *</label>
+                            <input type="text" class="form-input" id="pekerjaan" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Tinggi Badan (cm) *</label>
+                            <input type="number" step="0.1" class="form-input" id="tinggiBadan" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Berat Badan Awal (kg) *</label>
+                            <input type="number" step="0.1" class="form-input" id="beratBadanAwal" required>
+                        </div>
+                    </div>
+                    <div class="btn-group">
+                        <button type="submit" class="btn-primary">Simpan Biodata</button>
+                    </div>
+                </form>
+            </section>
+
+            <!-- Form Input Harian -->
+            <section class="form-section" id="inputHarianSection" style="display:none;">
+                <div class="form-header">
+                    <h3 class="form-title">Input Berat Badan Harian</h3>
+                </div>
+                
+                <!-- Info Berat Ideal -->
+                <div class="info-box">
+                    <h4>Berat Badan Ideal Anda</h4>
+                    <p id="beratIdealInfo">Menghitung...</p>
+                </div>
+
+                <form id="formBeratHarian" onsubmit="saveBeratHarian(event)">
+                    <div class="form-group">
+                        <label>Tanggal *</label>
+                        <input type="date" class="form-input" id="tanggalInput" required>
+                    </div>
+                    
+                    <div class="time-inputs">
+                        <div class="time-input-group">
+                            <label>Berat Pagi (07:00 - 09:00) *</label>
+                            <input type="number" step="0.1" class="form-input" id="beratPagi" required>
+                            <small style="color: #718096;">dalam kilogram (kg)</small>
+                        </div>
+                        <div class="time-input-group">
+                            <label>Berat Malam (21:00 - 23:00) *</label>
+                            <input type="number" step="0.1" class="form-input" id="beratMalam" required>
+                            <small style="color: #718096;">dalam kilogram (kg)</small>
+                        </div>
+                    </div>
+                    
+                    <div class="btn-group">
+                        <button type="submit" class="btn-primary">Simpan Data Harian</button>
+                        <button type="button" class="btn-secondary" onclick="resetForm()">Reset</button>
+                    </div>
+                </form>
+            </section>
+
+            <!-- Riwayat Data -->
+            <section class="data-table-section" id="riwayatSection" style="display:none;">
+                <div class="table-header">
+                    <h3 class="table-title">Riwayat Berat Badan (30 Hari Terakhir)</h3>
+                    <button class="btn-refresh" onclick="loadData()">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="23 4 23 10 17 10"></polyline>
+                            <polyline points="1 20 1 14 7 14"></polyline>
+                            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+                        </svg>
+                        Refresh
+                    </button>
+                </div>
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Tanggal</th>
+                                <th>Berat Pagi (kg)</th>
+                                <th>Berat Malam (kg)</th>
+                                <th>Rata-rata (kg)</th>
+                                <th>Perubahan</th>
+                            </tr>
+                        </thead>
+                        <tbody id="riwayatBody">
+                            <tr>
+                                <td colspan="5" class="loading-cell">Memuat data...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+    <script src="monitoring-berat-badan.js"></script>
+</body>
+</html>

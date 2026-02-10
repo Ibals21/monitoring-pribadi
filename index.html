@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitoring Pribadi - Iqbal Setiadi</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/luxon@3.3.0/build/global/luxon.min.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h1 class="logo">Monitoring<span>Pribadi</span></h1>
+                <p class="user-name">Iqbal Setiadi</p>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="index.html" class="nav-item active">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="14" width="7" height="7"></rect>
+                        <rect x="3" y="14" width="7" height="7"></rect>
+                    </svg>
+                    <span>Dashboard</span>
+                </a>
+                <a href="monitoring-berat-badan.html" class="nav-item">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                    </svg>
+                    <span>Berat Badan</span>
+                </a>
+                <a href="monitoring-tekanan-darah.html" class="nav-item">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                    </svg>
+                    <span>Tekanan Darah</span>
+                </a>
+                <a href="monitoring-sholat.html" class="nav-item">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                    <span>Monitoring Sholat</span>
+                </a>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <button class="btn-settings" onclick="openSettings()">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M12 1v6m0 6v6m5.2-13.2l-3.6 3.6m-3.6 3.6l-3.6 3.6m13.2-5.2l-3.6-3.6m-3.6-3.6l-3.6-3.6"></path>
+                    </svg>
+                    Pengaturan
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="page-header">
+                <div class="header-content">
+                    <h2 class="page-title">Dashboard</h2>
+                    <p class="page-subtitle">Ringkasan monitoring kesehatan Anda</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn-export" onclick="exportReport()">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="7 10 12 15 17 10"></polyline>
+                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                        </svg>
+                        Export PDF
+                    </button>
+                    <div class="date-display" id="currentDate"></div>
+                </div>
+            </header>
+
+            <!-- Summary Cards -->
+            <section class="summary-cards">
+                <div class="card card-berat">
+                    <div class="card-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                        </svg>
+                    </div>
+                    <div class="card-content">
+                        <p class="card-label">Berat Badan Terkini</p>
+                        <h3 class="card-value" id="beratTerkini">-- kg</h3>
+                        <p class="card-change" id="beratChange">Loading...</p>
+                    </div>
+                </div>
+
+                <div class="card card-tekanan">
+                    <div class="card-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                        </svg>
+                    </div>
+                    <div class="card-content">
+                        <p class="card-label">Tekanan Darah Terkini</p>
+                        <h3 class="card-value" id="tekananTerkini">--/-- mmHg</h3>
+                        <p class="card-change" id="tekananChange">Loading...</p>
+                    </div>
+                </div>
+
+                <div class="card card-sholat">
+                    <div class="card-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                    </div>
+                    <div class="card-content">
+                        <p class="card-label">Sholat Bulan Ini</p>
+                        <h3 class="card-value" id="sholatPersentase">--%</h3>
+                        <p class="card-change" id="sholatStatus">Loading...</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Charts Section -->
+            <section class="charts-grid">
+                <!-- Grafik Berat Badan -->
+                <div class="chart-container chart-large">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Grafik Berat Badan</h3>
+                        <div class="chart-filters">
+                            <button class="filter-btn active" onclick="filterBeratBadan('day')">Hari</button>
+                            <button class="filter-btn" onclick="filterBeratBadan('week')">Minggu</button>
+                            <button class="filter-btn" onclick="filterBeratBadan('month')">Bulan</button>
+                            <button class="filter-btn" onclick="filterBeratBadan('year')">Tahun</button>
+                        </div>
+                    </div>
+                    <canvas id="chartBeratBadan"></canvas>
+                </div>
+
+                <!-- Grafik Tekanan Darah -->
+                <div class="chart-container chart-large">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Grafik Tekanan Darah</h3>
+                        <div class="chart-filters">
+                            <button class="filter-btn active" onclick="filterTekananDarah('day')">Hari</button>
+                            <button class="filter-btn" onclick="filterTekananDarah('week')">Minggu</button>
+                            <button class="filter-btn" onclick="filterTekananDarah('month')">Bulan</button>
+                            <button class="filter-btn" onclick="filterTekananDarah('year')">Tahun</button>
+                        </div>
+                    </div>
+                    <canvas id="chartTekananDarah"></canvas>
+                </div>
+
+                <!-- Diagram Batang Rata-rata -->
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Rata-rata Bulanan</h3>
+                    </div>
+                    <canvas id="chartRataRata"></canvas>
+                </div>
+
+                <!-- Diagram Pie Sholat -->
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Persentase Sholat</h3>
+                        <div class="chart-filters">
+                            <button class="filter-btn active" onclick="filterSholat('month')">Bulan</button>
+                            <button class="filter-btn" onclick="filterSholat('year')">Tahun</button>
+                        </div>
+                    </div>
+                    <canvas id="chartSholat"></canvas>
+                </div>
+            </section>
+
+            <!-- Tabel Data Terkini -->
+            <section class="data-table-section">
+                <div class="table-header">
+                    <h3 class="table-title">Data Terkini (7 Hari Terakhir)</h3>
+                    <button class="btn-refresh" onclick="refreshData()">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="23 4 23 10 17 10"></polyline>
+                            <polyline points="1 20 1 14 7 14"></polyline>
+                            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+                        </svg>
+                        Refresh
+                    </button>
+                </div>
+                <div class="table-responsive">
+                    <table class="data-table" id="recentDataTable">
+                        <thead>
+                            <tr>
+                                <th>Tanggal</th>
+                                <th>Berat Badan (kg)</th>
+                                <th>Tekanan Darah (mmHg)</th>
+                                <th>Sholat 5 Waktu</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recentDataBody">
+                            <tr>
+                                <td colspan="4" class="loading-cell">Memuat data...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modal Export PDF -->
+    <div class="modal" id="exportModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Export Report PDF</h3>
+                <button class="modal-close" onclick="closeExportModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Tanggal Mulai</label>
+                    <input type="date" id="exportStartDate" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label>Tanggal Akhir</label>
+                    <input type="date" id="exportEndDate" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label>Pilih Data</label>
+                    <div class="checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" checked id="exportBeratBadan"> Berat Badan
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" checked id="exportTekananDarah"> Tekanan Darah
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" checked id="exportSholat"> Sholat
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeExportModal()">Batal</button>
+                <button class="btn-primary" onclick="generatePDF()">Generate PDF</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script src="dashboard.js"></script>
+</body>
+</html>

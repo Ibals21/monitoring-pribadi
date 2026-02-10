@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitoring Tekanan Darah - Iqbal Setiadi</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h1 class="logo">Monitoring<span>Pribadi</span></h1>
+                <p class="user-name">Iqbal Setiadi</p>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="index.html" class="nav-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg><span>Dashboard</span></a>
+                <a href="monitoring-berat-badan.html" class="nav-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg><span>Berat Badan</span></a>
+                <a href="monitoring-tekanan-darah.html" class="nav-item active"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg><span>Tekanan Darah</span></a>
+                <a href="monitoring-sholat.html" class="nav-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg><span>Monitoring Sholat</span></a>
+            </nav>
+            <div class="sidebar-footer"><button class="btn-settings" onclick="openSettings()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M12 1v6m0 6v6m5.2-13.2l-3.6 3.6m-3.6 3.6l-3.6 3.6m13.2-5.2l-3.6-3.6m-3.6-3.6l-3.6-3.6"></path></svg>Pengaturan</button></div>
+        </aside>
+        <main class="main-content">
+            <header class="page-header">
+                <div class="header-content">
+                    <h2 class="page-title">Monitoring Tekanan Darah</h2>
+                    <p class="page-subtitle">Pantau tekanan darah, obat, dan pola makan Anda</p>
+                </div>
+                <div class="header-actions"><div class="date-display" id="currentDate"></div></div>
+            </header>
+            <div class="info-box"><h4>Tekanan Darah Normal</h4><p>Sistolik: 90-120 mmHg | Diastolik: 60-80 mmHg<br>Jika tekanan darah Anda di luar range normal, segera konsultasi dengan dokter.</p></div>
+            <section class="form-section" id="inputSection">
+                <div class="form-header"><h3 class="form-title">Input Tekanan Darah Harian</h3></div>
+                <form id="formTekananDarah" onsubmit="saveTekananDarah(event)">
+                    <div class="form-group"><label>Tanggal *</label><input type="date" class="form-input" id="tanggalInput" required></div>
+                    <div class="time-inputs">
+                        <div><label>Sistolik Pagi * (mmHg)</label><input type="number" class="form-input" id="sistolikPagi" required></div>
+                        <div><label>Diastolik Pagi * (mmHg)</label><input type="number" class="form-input" id="diastolikPagi" required></div>
+                    </div>
+                    <div class="time-inputs">
+                        <div><label>Sistolik Malam * (mmHg)</label><input type="number" class="form-input" id="sistolikMalam" required></div>
+                        <div><label>Diastolik Malam * (mmHg)</label><input type="number" class="form-input" id="diastolikMalam" required></div>
+                    </div>
+                    <div class="form-group"><label class="checkbox-label"><input type="checkbox" id="sudahMinumObat"> Sudah minum obat hari ini</label></div>
+                    <div class="form-group"><label>Makanan Pagi</label><textarea class="form-textarea" id="makananPagi" placeholder="Contoh: Nasi putih, telur, sayur"></textarea></div>
+                    <div class="form-group"><label>Makanan Siang</label><textarea class="form-textarea" id="makananSiang"></textarea></div>
+                    <div class="form-group"><label>Makanan Malam</label><textarea class="form-textarea" id="makananMalam"></textarea></div>
+                    <div class="btn-group"><button type="submit" class="btn-primary">Simpan Data</button><button type="button" class="btn-secondary" onclick="resetForm()">Reset</button></div>
+                </form>
+            </section>
+            <section class="data-table-section">
+                <div class="table-header"><h3 class="table-title">Riwayat Tekanan Darah (30 Hari Terakhir)</h3><button class="btn-refresh" onclick="loadData()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>Refresh</button></div>
+                <div class="table-responsive"><table class="data-table"><thead><tr><th>Tanggal</th><th>Pagi (mmHg)</th><th>Malam (mmHg)</th><th>Obat</th><th>Status</th></tr></thead><tbody id="riwayatBody"><tr><td colspan="5" class="loading-cell">Memuat data...</td></tr></tbody></table></div>
+            </section>
+        </main>
+    </div>
+    <script src="app.js"></script>
+    <script src="monitoring-tekanan-darah.js"></script>
+</body>
+</html>
